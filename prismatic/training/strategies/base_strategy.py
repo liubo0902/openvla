@@ -29,6 +29,20 @@ from prismatic.vla.action_tokenizer import ActionTokenizer
 # Initialize Overwatch =>> Wraps `logging.Logger`
 overwatch = initialize_overwatch(__name__)
 
+def get_profiler():
+    return torch.profiler.profile(
+        activities=[
+            torch.profiler.ProfilerActivity.CPU,
+            torch.profiler.ProfilerActivity.CUDA,
+        ],
+        schedule=torch.profiler.schedule(wait=1, warmup=2, active=3, repeat=1),
+        on_trace_ready=torch.profiler.tensorboard_trace_handler("profile_traces"),
+        profile_memory=True,
+        with_stack=True,
+        record_shapes=True,
+    )
+
+
 
 # === Abstract Base Class for an arbitrary Training Strategy ===
 class TrainingStrategy(ABC):
@@ -264,6 +278,9 @@ class TrainingStrategy(ABC):
             num_workers=0,
             worker_init_fn=self.worker_init_fn,
         )
+
+        if overwatch.is_rank_zero():
+            profiler = get_profiler()
 
         # === Train ===
         status = metrics.get_status()
