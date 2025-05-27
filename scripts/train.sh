@@ -1,0 +1,11 @@
+torchrun --standalone --nnodes 1 --nproc-per-node 8 vla-scripts/train.py \
+  --pretrained_checkpoint /mnt_wg/zhoumo.xjq/vla/openvla/openvla-7b-prismatic/checkpoints/step-295000-epoch-40-loss=0.2200.pt \
+  --vla.type prism-dinosiglip-224px+mx-bridge \
+  --data_root_dir /mnt_wg/zhoumo.xjq/vla \
+  --run_root_dir ./vla_base \
+  --run_id vla_base \
+  --image_aug False \
+  --wandb_project vla \
+  --wandb_entity vla \
+  --save_interval 10000 \
+  --is_resume False
