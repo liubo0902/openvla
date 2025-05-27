@@ -48,12 +48,12 @@ class DinoSigLIPViTBackbone(VisionBackbone):
 
         # Initialize both Featurizers (ViTs) by downloading from HF / TIMM Hub if necessary
         self.dino_featurizer: VisionTransformer = timm.create_model(
-            self.dino_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size
+            self.dino_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size, pretrained_cfg_overlay=dict(file=f'{self.dino_timm_path_or_url}/pytorch_model.bin'),
         )
         self.dino_featurizer.eval()
 
         self.siglip_featurizer: VisionTransformer = timm.create_model(
-            self.siglip_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size
+            self.siglip_timm_path_or_url, pretrained=True, num_classes=0, img_size=self.default_image_size, pretrained_cfg_overlay=dict(file=f'{self.siglip_timm_path_or_url}/pytorch_model.bin'),
         )
         self.siglip_featurizer.eval()
 
