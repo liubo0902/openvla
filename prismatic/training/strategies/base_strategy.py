@@ -351,6 +351,7 @@ class TrainingStrategy(ABC):
                 # Compute metrics per dataset --> only on rank_zero since we don't log them on other workers anyways
                 if overwatch.is_rank_zero():
                     datasets = set(batch["dataset_names"])
+                    profiler.step()
                     if len(datasets) > 1:
                         for ds in datasets:
                             ds_mask = torch.tensor([elem == ds for elem in batch["dataset_names"]])
